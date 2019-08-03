@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <springProperty scope="context" name="serverPort" source="server.port"/>
+    <springProperty scope="context" name="profile" source="spring.profiles.active"/>
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+    <!-- Example for logging into the build folder of your project -->
+    <property name="LOG_FILE" value="${user.home}/logs/${springAppName}.${serverPort:-00}.${profile:-}.log"/>
+    <!--<property name="CONSOLE_LOG_PATTERN"-->
+    <!--value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(-&#45;&#45;){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>-->
+    <!--<property name="FILE_LOG_PATTERN"-->
+    <!--value="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p}${PID:- } &#45;&#45; [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>-->
+
+    <!-- Appender to log to console -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!-- Minimum logging level to be presented in the console logs-->
+            <level>INFO</level>
+        </filter>
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <!-- Appender to log to file -->
+    <appender name="flatfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>3000</maxHistory>
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+            <immediateFlush>true</immediateFlush>
+        </encoder>
+    </appender>
+
+    <logger name="com.ccb.sc.oaplat" level="TRACE" />
+    <logger name="com.netflix.discovery" level="ERROR" />
+    <root level="INFO">
+        <appender-ref ref="console"/>
+        <appender-ref ref="flatfile"/>
+    </root>
+</configuration>

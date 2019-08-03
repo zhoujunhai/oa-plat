@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: oa-plat
+  #  thymeleaf:
+  #    prefix: classpath:/static/
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/act2?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Hongkong
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+  activiti:
+    # 自动建表
+    #    database-schema: ACTIVITI
+    database-schema-update: false
+    check-process-definitions: true
+    history-level: full
+    db-history-used: true
+
+    mail-server-host: smtp.qq.com
+    mail-server-port: 465
+    mail-server-default-from: 739516635@qq.com
+    mail-server-user-name: 739516635@qq.com
+    mail-server-password: dxeukxliidfzbcej
+    mail-server-use-ssl: true
+# 关闭activiti登录验证
+  security:
+    basic:
+      enabled: false
+server:
+  port: 8761
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.ccb.sc.oaplat.entity
+  global-config:
+    refresh: true
+  configuration:
+    map-underscore-to-camel-case: true
+    aggressive-lazy-loading: false
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql语句,调试用
+
+logging:
+  config: classpath:logback-spring.xml
+
+password_max_retry_times: 3
